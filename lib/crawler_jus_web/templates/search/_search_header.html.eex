@@ -1,0 +1,11 @@
+<section>
+  <h1>Buscar</h1>
+  <p> Selecione um tribunal para listar os processos ou buscar pelo número unificado.</p>
+</section>
+ <%= form_for @conn, Routes.search_path(@conn, :show), [method: :get], fn f -> %>
+      <%= select f, :court_id, [{"Tribunal de Alagoas",1}],
+        prompt: "Escolha o Tribunal", required: true %>
+      </div>
+      <%= search_input f, :process_code , prompt: "Numero do processo", required: true%>
+      <%= submit "Search" %>
+  <% end %>
