@@ -15,6 +15,8 @@ defmodule CrawlerJusWeb.ChannelCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+
   using do
     quote do
       # Import conveniences for testing with channels
@@ -26,10 +28,10 @@ defmodule CrawlerJusWeb.ChannelCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(CrawlerJus.Repo)
+    :ok = Sandbox.checkout(CrawlerJus.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(CrawlerJus.Repo, {:shared, self()})
+      Sandbox.mode(CrawlerJus.Repo, {:shared, self()})
     end
 
     :ok

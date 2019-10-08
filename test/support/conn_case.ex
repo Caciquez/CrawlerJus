@@ -15,6 +15,9 @@ defmodule CrawlerJusWeb.ConnCase do
 
   use ExUnit.CaseTemplate
 
+  alias Ecto.Adapters.SQL.Sandbox
+  alias Phoenix.ConnTest
+
   using do
     quote do
       # Import conveniences for testing with connections
@@ -27,12 +30,12 @@ defmodule CrawlerJusWeb.ConnCase do
   end
 
   setup tags do
-    :ok = Ecto.Adapters.SQL.Sandbox.checkout(CrawlerJus.Repo)
+    :ok = Sandbox.checkout(CrawlerJus.Repo)
 
     unless tags[:async] do
-      Ecto.Adapters.SQL.Sandbox.mode(CrawlerJus.Repo, {:shared, self()})
+      Sandbox.mode(CrawlerJus.Repo, {:shared, self()})
     end
 
-    {:ok, conn: Phoenix.ConnTest.build_conn()}
+    {:ok, conn: ConnTest.build_conn()}
   end
 end
