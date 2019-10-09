@@ -7,7 +7,11 @@ defmodule CrawlerJus.CrawlerEngine do
   end
 
   def execute_request(url) do
-    case HTTPoison.get(url, [], hackney: [cookie: "JSESSIONID=doot.cpopg1"]) do
+    request_url = "https://www2.tjal.jus.br" <> url
+
+    case HTTPoison.get(request_url, [],
+           hackney: [cookie: "JSESSIONID=8C004D3E7C547EB03C6327334DE14921.cpopg1"]
+         ) do
       {:ok, %HTTPoison.Response{status_code: status_code, headers: headers}}
       when status_code > 300 and status_code < 400 ->
         case get_location_header(headers) do
@@ -27,17 +31,17 @@ defmodule CrawlerJus.CrawlerEngine do
   end
 
   def build_url(process_number) do
-    "https://www2.tjal.jus.br/cpopg/search.do?conversationId&" <>
-      "dadosConsulta.localPesquisa.cdLocal=1&" <>
+    "/cpopg/search.do?conversationId&" <>
+      "dadosConsulta.localPesquisa.cdLocal:=1&" <>
       "cbPesquisa=NUMPROC&" <>
-      "dadosConsulta.tipoNuProcesso=UNIFICADO" <>
-      "numeroDigitoAnoUnificado=#{String.slice(process_number, 0..-11)}" <>
-      "foroNumeroUnificado=#{String.slice(process_number, -4..-1)}" <>
-      "dadosConsulta.valorConsultaNuUnificado=#{process_number}" <>
+      "dadosConsulta.tipoNuProcesso=UNIFICADO&" <>
+      "numeroDigitoAnoUnificado=#{String.slice(process_number, 0..-11)}&" <>
+      "foroNumeroUnificado=#{String.slice(process_number, -4..-1)}&" <>
+      "dadosConsulta.valorConsultaNuUnificado=#{process_number}&" <>
       "uuidCaptcha:sajcaptcha_4613b036352e45e580fb5e5769717e49"
   end
 
-  defp get_location_header(headers) do
+  def get_location_header(headers) do
     for {key, value} <- headers, String.downcase(key) == "location" do
       value
     end
