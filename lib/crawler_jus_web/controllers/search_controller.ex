@@ -2,6 +2,7 @@ defmodule CrawlerJusWeb.SearchController do
   use CrawlerJusWeb, :controller
 
   alias CrawlerJus.{CrawlerEngine, Scrapper}
+  alias CrawlerJus.Processes
 
   def index(conn, _params) do
     render(conn, "index.html")
@@ -9,7 +10,15 @@ defmodule CrawlerJusWeb.SearchController do
 
   def show(conn, %{"court_id" => court_id, "process_code" => process_code}) do
     with {:ok, html_body} <- CrawlerEngine.start_crawler(process_code),
-         {:ok, _scrapped_data} <- Scrapper.start_scrapper(html_body) do
+         {:ok, scrapped_data} <- Scrapper.start_scrapper(html_body),
+         {:ok, data} <-
+           Processes.create_process_data(%{
+             data: scrapped_data,
+             court_id: court_id,
+             process_code: process_code
+           }) do
+      require IEx
+      IEx.pry()
     else
       {:error, :process_not_found} ->
         {:error, "process_not_found"}
@@ -19,3 +28,10 @@ defmodule CrawlerJusWeb.SearchController do
     end
   end
 end
+
+# {:ok, %ProcessData{} = _process_data} <-
+#   Processes.create_process_data(%{
+#     data: scrapped_data,
+#     court_id: court_id,
+#     process_code: process_code
+#   })
