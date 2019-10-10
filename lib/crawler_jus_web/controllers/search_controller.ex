@@ -28,10 +28,3 @@ defmodule CrawlerJusWeb.SearchController do
     end
   end
 end
-
-# {:ok, %ProcessData{} = _process_data} <-
-#   Processes.create_process_data(%{
-#     data: scrapped_data,
-#     court_id: court_id,
-#     process_code: process_code
-#   })

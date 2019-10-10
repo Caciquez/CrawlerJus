@@ -6,7 +6,7 @@ defmodule CrawlerJus.CrawlerEngine do
     end
   end
 
-  def execute_request(url) do
+  defp execute_request(url) do
     request_url = "https://www2.tjal.jus.br" <> url
 
     case HTTPoison.get(request_url, [],
@@ -30,7 +30,7 @@ defmodule CrawlerJus.CrawlerEngine do
     end
   end
 
-  def build_url(process_number) do
+  defp build_url(process_number) do
     "/cpopg/search.do?conversationId&" <>
       "dadosConsulta.localPesquisa.cdLocal:=1&" <>
       "cbPesquisa=NUMPROC&" <>
@@ -41,13 +41,13 @@ defmodule CrawlerJus.CrawlerEngine do
       "uuidCaptcha:sajcaptcha_4613b036352e45e580fb5e5769717e49"
   end
 
-  def get_location_header(headers) do
+  defp get_location_header(headers) do
     for {key, value} <- headers, String.downcase(key) == "location" do
       value
     end
   end
 
-  def valid_process_number?(process_number) do
+  defp valid_process_number?(process_number) do
     with 25 <- String.length(process_number),
          "8.02" <- String.slice(process_number, 16..-6) do
       true
