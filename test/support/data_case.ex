@@ -24,7 +24,7 @@ defmodule CrawlerJus.DataCase do
       import Ecto
       import Ecto.Changeset
       import Ecto.Query
-      import CrawlerJus.DataCase
+      import CrawlerJus.{DataCase, Factory}
     end
   end
 

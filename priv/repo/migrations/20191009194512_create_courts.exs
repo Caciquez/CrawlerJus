@@ -3,9 +3,9 @@ defmodule CrawlerJus.Repo.Migrations.CreateCourts do
 
   def change do
     create table(:courts) do
-      add :name, :string
-      add :url, :string
-      add :name_abbreviation, :string
+      add :name, :string, null: false
+      add :url, :string, null: false
+      add :name_abbreviation, :string, null: false
 
       timestamps()
     end

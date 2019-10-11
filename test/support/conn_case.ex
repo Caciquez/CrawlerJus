@@ -24,6 +24,7 @@ defmodule CrawlerJusWeb.ConnCase do
       use Phoenix.ConnTest
       alias CrawlerJusWeb.Router.Helpers, as: Routes
 
+      import CrawlerJus.Factory
       # The default endpoint for testing
       @endpoint CrawlerJusWeb.Endpoint
     end

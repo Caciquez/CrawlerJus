@@ -11,9 +11,10 @@ defmodule CrawlerJus.Application do
       # Start the Ecto repository
       CrawlerJus.Repo,
       # Start the endpoint when the application starts
-      CrawlerJusWeb.Endpoint
+      CrawlerJusWeb.Endpoint,
       # Starts a worker by calling: CrawlerJus.Worker.start_link(arg)
       # {CrawlerJus.Worker, arg},
+      {Redix, {redis_url(), [name: :redix]}}
     ]
 
     # See https://hexdocs.pm/elixir/Supervisor.html
@@ -27,5 +28,9 @@ defmodule CrawlerJus.Application do
   def config_change(changed, _new, removed) do
     CrawlerJusWeb.Endpoint.config_change(changed, removed)
     :ok
+  end
+
+  defp redis_url do
+    Application.get_env(:redix, :redis_url)
   end
 end

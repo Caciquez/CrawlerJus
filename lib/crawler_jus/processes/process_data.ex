@@ -3,9 +3,10 @@ defmodule CrawlerJus.Processes.ProcessData do
   import Ecto.Changeset
 
   schema "process_data" do
-    field :data, :map
-    field :process_code, :string
-    field :court_id, :id
+    field :data, :map, null: false
+    field :process_code, :string, null: false
+
+    belongs_to(:court, CrawlerJus.Processes.Court)
 
     timestamps()
   end

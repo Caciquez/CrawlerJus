@@ -3,9 +3,11 @@ defmodule CrawlerJus.Processes.Court do
   import Ecto.Changeset
 
   schema "courts" do
-    field :name, :string
-    field :name_abbreviation, :string
+    field :name, :string, null: false
+    field :name_abbreviation, :string, null: false
     field :url, :string
+
+    has_many(:process_data, CrawlerJus.Processes.ProcessData)
 
     timestamps()
   end

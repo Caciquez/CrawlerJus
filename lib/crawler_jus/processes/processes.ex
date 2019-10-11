@@ -7,6 +7,7 @@ defmodule CrawlerJus.Processes do
   alias CrawlerJus.Repo
 
   alias CrawlerJus.Processes.Court
+  alias CrawlerJus.Processes.ProcessData
 
   @doc """
   Returns the list of courts.
@@ -102,8 +103,6 @@ defmodule CrawlerJus.Processes do
     Court.changeset(court, %{})
   end
 
-  alias CrawlerJus.Processes.ProcessData
-
   @doc """
   Returns the list of process_data.
 
@@ -132,6 +131,9 @@ defmodule CrawlerJus.Processes do
 
   """
   def get_process_data!(id), do: Repo.get!(ProcessData, id)
+
+  def get_process_data_by_process_code(process_code),
+    do: Repo.get_by(ProcessData, process_code: process_code)
 
   @doc """
   Creates a process_data.
@@ -196,5 +198,19 @@ defmodule CrawlerJus.Processes do
   """
   def change_process_data(%ProcessData{} = process_data) do
     ProcessData.changeset(process_data, %{})
+  end
+
+  def create_or_update_process_data(process_code, process_data_params, court_id) do
+    case get_process_data_by_process_code(process_code) do
+      nil ->
+        create_process_data(%{
+          data: process_data_params,
+          court_id: court_id,
+          process_code: process_code
+        })
+
+      %ProcessData{} = process_data ->
+        update_process_data(process_data, %{data: process_data_params})
+    end
   end
 end

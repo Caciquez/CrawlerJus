@@ -13,10 +13,21 @@ defmodule CrawlerJusWeb.Router do
     plug :accepts, ["json"]
   end
 
+  pipeline :check_cache do
+    plug(CrawlerJusWeb.Plugs.CheckCache)
+  end
+
   scope "/", CrawlerJusWeb do
     pipe_through :browser
 
     get "/", SearchController, :index
+  end
+
+  scope "/", CrawlerJusWeb do
+    pipe_through :browser
+    pipe_through :api
+    pipe_through :check_cache
+
     get("/search-process", SearchController, :show)
   end
 

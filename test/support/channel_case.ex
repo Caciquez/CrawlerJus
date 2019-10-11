@@ -14,7 +14,7 @@ defmodule CrawlerJusWeb.ChannelCase do
   """
 
   use ExUnit.CaseTemplate
-
+  alias CrawlerJus.Repo
   alias Ecto.Adapters.SQL.Sandbox
 
   using do
@@ -28,10 +28,10 @@ defmodule CrawlerJusWeb.ChannelCase do
   end
 
   setup tags do
-    :ok = Sandbox.checkout(CrawlerJus.Repo)
+    :ok = Sandbox.checkout(Repo)
 
     unless tags[:async] do
-      Sandbox.mode(CrawlerJus.Repo, {:shared, self()})
+      Sandbox.mode(Repo, {:shared, self()})
     end
 
     :ok

@@ -2,10 +2,9 @@ defmodule CrawlerJus.ProcessesTest do
   use CrawlerJus.DataCase
 
   alias CrawlerJus.Processes
+  alias CrawlerJus.Processes.{Court, ProcessData}
 
   describe "courts" do
-    alias CrawlerJus.Processes.Court
-
     @valid_attrs %{
       name: "some name",
       name_abbreviation: "some name_abbreviation",
@@ -75,8 +74,6 @@ defmodule CrawlerJus.ProcessesTest do
   end
 
   describe "process_data" do
-    alias CrawlerJus.Processes.ProcessData
-
     @valid_attrs %{data: %{}, process_code: "some process_code"}
     @update_attrs %{data: %{}, process_code: "some updated process_code"}
     @invalid_attrs %{data: nil, process_code: nil}
@@ -98,6 +95,11 @@ defmodule CrawlerJus.ProcessesTest do
     test "get_process_data!/1 returns the process_data with given id" do
       process_data = process_data_fixture()
       assert Processes.get_process_data!(process_data.id) == process_data
+    end
+
+    test "get_process_data_by_process_code/1 returns the process_data with given process_code" do
+      process_data = process_data_fixture()
+      assert Processes.get_process_data_by_process_code(process_data.process_code) == process_data
     end
 
     test "create_process_data/1 with valid data creates a process_data" do
@@ -138,6 +140,80 @@ defmodule CrawlerJus.ProcessesTest do
     test "change_process_data/1 returns a process_data changeset" do
       process_data = process_data_fixture()
       assert %Ecto.Changeset{} = Processes.change_process_data(process_data)
+    end
+  end
+
+  describe "create_or_update_process_data/3" do
+    test "inserts process_data if one with process_code doesnt exist" do
+      court = insert(:court)
+      process_code = "0067154-55.2010.8.02.0001"
+
+      process_data_params = %{
+        "action_value" => "R$ 510,00",
+        "area" => "Cível",
+        "class" => "Ação Civil Pública",
+        "data_distribition" => "29/09/2010 às 15:57 - Sorteio",
+        "judge" => "Antonio Emanuel Dória Ferreira",
+        "movimentations_list" => [
+          %{
+            "data" => "15/09/2017",
+            "moviment" => "Baixa Definitiva",
+            "moviment_url" => "/url/com/dados/do/processo"
+          },
+          %{
+            "data" => "05/07/2016",
+            "moviment" => "Baixa definitiva",
+            "moviment_url" => "/url/com/dados/do/processo"
+          }
+        ],
+        "parts" => %{
+          " Defensor" => "Defensor",
+          " Procurador" => "Município de Maceió"
+        },
+        "subject_matter" => "Tratamento Médico-Hospitalar e/ou Fornecimento de Medicamentos"
+      }
+
+      assert {:ok, %ProcessData{} = process_data} =
+               Processes.create_or_update_process_data(
+                 process_code,
+                 process_data_params,
+                 court.id
+               )
+    end
+
+    test "update process_data when process_code already exists" do
+      court = insert(:court)
+      existing_process_data = insert(:process_data)
+
+      process_data_params = %{
+        "action_value" => "R$ 1000,00",
+        "area" => "Penal",
+        "class" => "Ação Penal Pública",
+        "data_distribition" => "30/09/2019 às 15:57 - Sorteio",
+        "judge" => "John The Monster",
+        "movimentations_list" => [
+          %{
+            "data" => "15/09/2017",
+            "moviment" => "Baixa Definitiva",
+            "moviment_url" => "/url/com/dados/do/processo"
+          }
+        ],
+        "parts" => %{
+          " Defensor" => "Defensor",
+          " Procurador" => "Município de Alagoas"
+        },
+        "subject_matter" => "Prisão Domiciliar"
+      }
+
+      assert {:ok, %ProcessData{} = process_data} =
+               Processes.create_or_update_process_data(
+                 existing_process_data.process_code,
+                 process_data_params,
+                 court.id
+               )
+
+      assert process_data.data == process_data_params
+      assert process_data.process_code == existing_process_data.process_code
     end
   end
 end

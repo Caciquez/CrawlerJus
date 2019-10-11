@@ -25,7 +25,7 @@ defmodule CrawlerJus.MixProject do
   end
 
   # Specifies which paths to compile per environment.
-  defp elixirc_paths(:test), do: ["lib", "test/support"]
+  defp elixirc_paths(:test), do: ["lib", "test/factories", "test/support"]
   defp elixirc_paths(_), do: ["lib"]
 
   # Specifies your project dependencies.
@@ -47,7 +47,6 @@ defmodule CrawlerJus.MixProject do
       {:ex_machina, "~> 2.2", only: :test},
       {:faker, "~> 0.11", only: :test},
       {:httpoison, "~> 1.6"},
-      {:mox, "~> 0.5", only: :test},
       {:redix, ">= 0.0.0"},
       {:castore, ">= 0.0.0"},
       {:floki, "~> 0.23.0"}
