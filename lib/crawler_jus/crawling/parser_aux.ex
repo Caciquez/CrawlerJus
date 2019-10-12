@@ -1,4 +1,4 @@
-defmodule CrawlerJus.Parser do
+defmodule CrawlerJus.ParserAux do
   def extract_all_parts_names(html_body) do
     table1 =
       html_body
@@ -21,7 +21,7 @@ defmodule CrawlerJus.Parser do
     |> List.delete(" ")
   end
 
-  def extract_process_part_value(html_word) do
+  defp extract_process_part_value(html_word) do
     html_word
     |> Floki.text()
     |> String.replace(~r/(\w*:\w+|\w+:\w*)/, "")

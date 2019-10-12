@@ -3,15 +3,15 @@ defmodule CrawlerJusWeb.Plugs.CheckCache do
 
   use Plug.Builder
 
-  alias CrawlerJus.Cache
+  alias CrawlerJus.RedisCache
 
   def init(opts), do: opts
 
   def call(conn, _opts) do
     %{"process_code" => process_code} = conn.params
 
-    with false <- Cache.process_cache_expired?(process_code),
-         {:ok, data} = Cache.get_process_cache_data(process_code) do
+    with false <- RedisCache.process_cache_expired?(process_code),
+         {:ok, data} = RedisCache.get_process_cache_data(process_code) do
       conn
       |> assign(:process_cached_data, data)
     else

@@ -1,7 +1,7 @@
 defmodule CrawlerJusWeb.SearchController do
   use CrawlerJusWeb, :controller
 
-  alias CrawlerJus.{Cache, CrawlerEngine, Scrapper}
+  alias CrawlerJus.{CrawlerEngine, RedisCache, Scrapper}
   alias CrawlerJus.Processes
 
   action_fallback(CrawlerJusWeb.ErrorFallbackController)
@@ -18,7 +18,7 @@ defmodule CrawlerJusWeb.SearchController do
          {:ok, scrapped_data} <- Scrapper.start_scrapper(html_body),
          {:ok, _data} <-
            Processes.create_or_update_process_data(process_code, scrapped_data, court_id),
-         {:ok, _process_code} <- Cache.set_process_cache_ttl(process_code, scrapped_data) do
+         {:ok, _process_code} <- RedisCache.set_process_cache_ttl(process_code, scrapped_data) do
       conn
       |> put_status(200)
       |> json(%{data: scrapped_data})

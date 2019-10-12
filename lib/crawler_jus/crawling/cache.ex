@@ -1,5 +1,15 @@
-defmodule CrawlerJus.Cache do
-  @expiring_time 86_400_000
+defmodule CrawlerJus.RedisCache do
+  @typep process_data :: map()
+  @typep process_code :: String.t()
+  @typep error_list :: String.t() | String.t()
+  @typep error_option :: [error_list]
+
+  @callback process_cache_expired?(process_code) :: boolean()
+  @callback get_process_cache_data(process_code) ::
+              {:ok, nil} | {:ok, map()} | {:error, String.t()}
+  @callback set_process_cache_ttl(process_code, process_data) ::
+              {:ok, String.t()} | {:ok, error_option} | {:error, String.t()}
+
   def process_cache_expired?(process_code) do
     case Redix.command(:redix, ["TTL", process_code]) do
       {:ok, -2} -> true
@@ -12,7 +22,7 @@ defmodule CrawlerJus.Cache do
 
     commands = [
       ["SET", process_code, encoded_data],
-      ["PEXPIRE", process_code, @expiring_time]
+      ["PEXPIRE", process_code, 86_400_000]
     ]
 
     case Redix.pipeline(:redix, commands) do

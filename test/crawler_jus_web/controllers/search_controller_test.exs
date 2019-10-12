@@ -34,7 +34,7 @@ defmodule CrawlerJusWeb.SearchControllerTest do
         "subject_matter" => "Prisão Domiciliar"
       }
 
-      RedisCacheMock
+      CrawlerJus.RedisCacheMock
       |> expect(:process_cache_expired?, fn _process_code -> false end)
 
       conn =
