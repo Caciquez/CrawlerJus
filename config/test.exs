@@ -8,5 +8,5 @@ config :crawler_jus, CrawlerJusWeb.Endpoint,
 
 # Print only warnings and errors during test
 config :logger, level: :warn
-
+config :crawler_jus, :redis_cache, RedisCacheMock
 import_config "db/#{Mix.env()}.secret.exs"

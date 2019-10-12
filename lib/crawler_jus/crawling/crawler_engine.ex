@@ -22,8 +22,14 @@ defmodule CrawlerJus.CrawlerEngine do
             {:error, :no_location_header}
         end
 
-      {:ok, %HTTPoison.Response{status_code: 200, body: body}} ->
-        {:ok, body}
+      {:ok, %HTTPoison.Response{status_code: 200, body: body, headers: headers}} ->
+        {:ok, body, headers}
+
+      {:ok, %HTTPoison.Response{status_code: status_code}} when status_code >= 400 ->
+        {:error, :refused}
+
+      {:error, %HTTPoison.Error{reason: :timeout}} ->
+        {:error, :timeout}
 
       reason ->
         {:error, reason}

@@ -14,7 +14,7 @@ defmodule CrawlerJusWeb.SearchController do
         "court_id" => court_id,
         "process_code" => process_code
       }) do
-    with {:ok, html_body} <- CrawlerEngine.start_crawler(process_code),
+    with {:ok, html_body, _headers} <- CrawlerEngine.start_crawler(process_code),
          {:ok, scrapped_data} <- Scrapper.start_scrapper(html_body),
          {:ok, _data} <-
            Processes.create_or_update_process_data(process_code, scrapped_data, court_id),

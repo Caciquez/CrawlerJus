@@ -1,13 +1,37 @@
 defmodule CrawlerJus.CrawlerEngineTest do
   use CrawlerJusWeb.ConnCase
+  use ExUnit.Case, async: true
+  use ExVCR.Mock, adapter: ExVCR.Adapter.Hackney
 
   alias CrawlerJus.CrawlerEngine
 
-  describe "start_crawler/2" do
-    test "returns error when process code is invalid" do
-      process_code = "987.00-tootledoot"
+  setup do
+    HTTPoison.start()
+    ExVCR.Config.cassette_library_dir("fixture/crawler_engine_cassets")
+    :ok
+  end
 
-      assert {:error, invalid_process_number} = CrawlerEngine.start_crawler(process_code)
+  describe "start_crawler/2" do
+    test "returns html body when process code is valid" do
+      use_cassette "crawl_process_sucess" do
+        {:ok, html_body, headers} = CrawlerEngine.start_crawler("0067154-55.2010.8.02.0001")
+
+        assert String.contains?(html_body, [
+                 "Dados do Processo",
+                 "Partes do Processo",
+                 "Movimentações"
+               ])
+
+        assert {"Content-Type", "text/html;charset=UTF-8"} ==
+                 List.keyfind(headers, "Content-Type", 0)
+      end
+    end
+
+    test "returns error when process code is invalid" do
+      use_cassette "crawl_process_error" do
+        {:error, msg} = CrawlerEngine.start_crawler("987.00-tootledoot")
+        assert msg == :invalid_process_number
+      end
     end
   end
 end

@@ -1,11 +1,9 @@
 defmodule CrawlerJus.ProcessDataFactory do
   defmacro __using__(_opts) do
-    alias Faker.Code
-
     quote do
       def process_data_factory do
         %CrawlerJus.Processes.ProcessData{
-          process_code: Code.issn(),
+          process_code: "0067154-55.2010.8.02.0001",
           court: build(:court),
           data: %{
             "action_value" => "R$ 510,00",

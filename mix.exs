@@ -49,7 +49,9 @@ defmodule CrawlerJus.MixProject do
       {:httpoison, "~> 1.6"},
       {:redix, ">= 0.0.0"},
       {:castore, ">= 0.0.0"},
-      {:floki, "~> 0.23.0"}
+      {:floki, "~> 0.23.0"},
+      {:mox, "~> 0.5", only: :test},
+      {:exvcr, "~> 0.10", only: :test}
     ]
   end
 

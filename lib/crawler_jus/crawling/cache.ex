@@ -1,4 +1,5 @@
 defmodule CrawlerJus.Cache do
+  @expiring_time 86_400_000
   def process_cache_expired?(process_code) do
     case Redix.command(:redix, ["TTL", process_code]) do
       {:ok, -2} -> true
@@ -11,7 +12,7 @@ defmodule CrawlerJus.Cache do
 
     commands = [
       ["SET", process_code, encoded_data],
-      ["PEXPIRE", process_code, expiring_time()]
+      ["PEXPIRE", process_code, @expiring_time]
     ]
 
     case Redix.pipeline(:redix, commands) do
@@ -42,13 +43,5 @@ defmodule CrawlerJus.Cache do
       {:error, error} ->
         {:error, error}
     end
-  end
-
-  defp expiring_time do
-    86_400_000
-    # case Application.get_env(:crawler_jus, CrawlerJusWeb.Endpoint)[:app_env] do
-    #   "test" -> 3000
-    #   _ -> 86_400_000
-    # end
   end
 end
