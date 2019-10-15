@@ -42,6 +42,8 @@ defmodule CrawlerJusWeb do
       import CrawlerJusWeb.ErrorHelpers
       import CrawlerJusWeb.Gettext
       alias CrawlerJusWeb.Router.Helpers, as: Routes
+
+      import ReactPhoenix.ClientSide
     end
   end
 

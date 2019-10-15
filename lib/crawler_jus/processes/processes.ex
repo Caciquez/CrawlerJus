@@ -203,14 +203,31 @@ defmodule CrawlerJus.Processes do
   def create_or_update_process_data(process_code, process_data_params, court_id) do
     case get_process_data_by_process_code(process_code) do
       nil ->
-        create_process_data(%{
-          data: process_data_params,
-          court_id: court_id,
-          process_code: process_code
-        })
+        {:ok, %ProcessData{} = process_data} =
+          create_process_data(%{
+            data: process_data_params,
+            court_id: court_id,
+            process_code: process_code
+          })
+
+        {:ok, preload_court_data_into_process(process_data)}
 
       %ProcessData{} = process_data ->
-        update_process_data(process_data, %{data: process_data_params})
+        {:ok, %ProcessData{} = process_data} =
+          update_process_data(process_data, %{data: process_data_params, court_id: court_id})
+
+        {:ok, preload_court_data_into_process(process_data)}
+    end
+  end
+
+  def preload_court_data_into_process(process), do: Repo.preload(process, [:court])
+
+  def valid_process_number?(process_number) do
+    with 25 <- String.length(process_number),
+         "8.02" <- String.slice(process_number, 16..-6) do
+      true
+    else
+      _ -> false
     end
   end
 end

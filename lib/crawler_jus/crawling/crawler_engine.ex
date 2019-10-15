@@ -1,9 +1,8 @@
 defmodule CrawlerJus.CrawlerEngine do
   def start_crawler(process_number) do
-    case valid_process_number?(process_number) do
-      true -> process_number |> build_url |> execute_request
-      false -> {:error, :invalid_process_number}
-    end
+    process_number
+    |> build_url
+    |> execute_request
   end
 
   defp execute_request(url) do
@@ -50,15 +49,6 @@ defmodule CrawlerJus.CrawlerEngine do
   defp get_location_header(headers) do
     for {key, value} <- headers, String.downcase(key) == "location" do
       value
-    end
-  end
-
-  defp valid_process_number?(process_number) do
-    with 25 <- String.length(process_number),
-         "8.02" <- String.slice(process_number, 16..-6) do
-      true
-    else
-      _ -> false
     end
   end
 

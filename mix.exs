@@ -52,7 +52,7 @@ defmodule CrawlerJus.MixProject do
       {:floki, "~> 0.23.0"},
       {:mox, "~> 0.5", only: :test},
       {:exvcr, "~> 0.10", only: :test},
-      {:parallel_task, "~> 0.1.0"}
+      {:react_phoenix, "~>1.0.0"}
     ]
   end
 

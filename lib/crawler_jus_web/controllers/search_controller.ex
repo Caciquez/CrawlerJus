@@ -7,27 +7,35 @@ defmodule CrawlerJusWeb.SearchController do
   action_fallback(CrawlerJusWeb.ErrorFallbackController)
 
   def index(conn, _params) do
-    render(conn, "index.html")
+    courts = Processes.list_courts()
+
+    render(conn, "index.html", courts: courts, process: nil)
   end
 
   def show(%{assigns: %{cache_expired: true}} = conn, %{
         "court_id" => court_id,
         "process_code" => process_code
       }) do
+    court = Processes.get_court!(court_id)
+
     with {:ok, html_body, _headers} <- CrawlerEngine.start_crawler(process_code),
          {:ok, scrapped_data} <- Scrapper.start_scrapper(html_body),
-         {:ok, _data} <-
+         {:ok, data} <-
            Processes.create_or_update_process_data(process_code, scrapped_data, court_id),
-         {:ok, _process_code} <- RedisCache.set_process_cache_ttl(process_code, scrapped_data) do
+         {:ok, _process_code} <-
+           RedisCache.set_process_cache_ttl(process_code, data) do
       conn
       |> put_status(200)
-      |> json(%{data: scrapped_data})
+      |> json(%{data: %{process_data: scrapped_data, court: court}})
     end
   end
 
-  def show(%{assigns: %{process_cached_data: process_data}} = conn, _params) do
+  def show(
+        %{assigns: %{process_cached_data: process_data, court_cached_data: court_data}} = conn,
+        _params
+      ) do
     conn
     |> put_status(200)
-    |> json(%{data: process_data})
+    |> json(%{data: %{process_data: process_data, court: court_data}})
   end
 end

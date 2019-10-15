@@ -3,17 +3,19 @@ defmodule CrawlerJusWeb.Plugs.CheckCache do
 
   use Plug.Builder
 
-  alias CrawlerJus.RedisCache
+  alias CrawlerJus.{Processes, RedisCache}
 
   def init(opts), do: opts
 
   def call(conn, _opts) do
     %{"process_code" => process_code} = conn.params
 
-    with false <- RedisCache.process_cache_expired?(process_code),
-         {:ok, data} = RedisCache.get_process_cache_data(process_code) do
+    with true <- Processes.valid_process_number?(process_code),
+         false <- RedisCache.process_cache_expired?(process_code),
+         {:ok, process_data, court_data} = RedisCache.get_process_cache_data(process_code) do
       conn
-      |> assign(:process_cached_data, data)
+      |> assign(:process_cached_data, process_data)
+      |> assign(:court_cached_data, court_data)
     else
       {:error, msg} ->
         conn
@@ -24,6 +26,12 @@ defmodule CrawlerJusWeb.Plugs.CheckCache do
       true ->
         conn
         |> assign(:cache_expired, true)
+
+      _ ->
+        conn
+        |> put_status(:unauthorized)
+        |> json(%{message: "Codigo de processo com formato invalido"})
+        |> halt()
     end
   end
 end

@@ -1,4 +1,7 @@
 defmodule CrawlerJus.RedisCache do
+  @doc """
+    behaviour of module for Mock tests.
+  """
   @typep process_data :: map()
   @typep process_code :: String.t()
   @typep error_list :: String.t() | String.t()
@@ -46,9 +49,12 @@ defmodule CrawlerJus.RedisCache do
         {:ok, nil}
 
       {:ok, data} ->
-        content = Jason.decode!(data, %{keys: :atoms})
+        decoded_data = Jason.decode!(data, %{keys: :atoms})
 
-        {:ok, content}
+        court_data = decoded_data.court
+        process_data = Map.delete(decoded_data, :court)
+
+        {:ok, process_data, court_data}
 
       {:error, error} ->
         {:error, error}

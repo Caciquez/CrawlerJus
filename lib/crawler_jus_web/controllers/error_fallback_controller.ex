@@ -37,11 +37,6 @@ defmodule CrawlerJusWeb.ErrorFallbackController do
     |> send_resp(404, "Codigo de processo não existente")
   end
 
-  def call(conn, {:error, :invalid_process_number}) do
-    conn
-    |> send_resp(401, "Codigo de processo com formato invalido")
-  end
-
   def call(conn, {:error, _error}) do
     put_status(conn, :not_acceptable)
   end

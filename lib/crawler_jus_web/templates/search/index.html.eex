@@ -1,1 +1,7 @@
- <%= render "_search_header.html", conn: @conn %>
+
+<div id="search-page">
+  <section class="row">
+    <%= react_component("Components.ProcessSearchProvider", %{courts: @courts}) %>
+  </section>
+</div>
+

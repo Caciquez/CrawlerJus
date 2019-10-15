@@ -2,6 +2,8 @@ defmodule CrawlerJus.Processes.Court do
   use Ecto.Schema
   import Ecto.Changeset
 
+  @derive {Jason.Encoder, except: [:__meta__, :__struct__, :process_data]}
+
   schema "courts" do
     field :name, :string, null: false
     field :name_abbreviation, :string, null: false
