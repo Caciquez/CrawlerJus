@@ -48,7 +48,11 @@ defmodule CrawlerJus.CrawlerEngine do
 
   defp get_location_header(headers) do
     for {key, value} <- headers, String.downcase(key) == "location" do
-      value
+      if String.contains?(value, ["show.do"]) do
+        value
+      else
+        []
+      end
     end
   end
 

@@ -74,38 +74,47 @@ defmodule CrawlerJus.ProcessesTest do
   end
 
   describe "process_data" do
-    @valid_attrs %{data: %{}, process_code: "some process_code"}
     @update_attrs %{data: %{}, process_code: "some updated process_code"}
     @invalid_attrs %{data: nil, process_code: nil}
 
-    def process_data_fixture(attrs \\ %{}) do
-      {:ok, process_data} =
-        attrs
-        |> Enum.into(@valid_attrs)
-        |> Processes.create_process_data()
-
-      process_data
-    end
-
     test "list_process_data/0 returns all process_data" do
-      process_data = process_data_fixture()
-      assert Processes.list_process_data() == [process_data]
+      process_data1 = insert(:process_data)
+      process_data2 = insert(:process_data)
+
+      [process1 | [process2]] = Processes.list_process_data()
+
+      assert process_data1.process_code == process1.process_code
+      assert process_data1.data == process1.data
+
+      assert process_data2.process_code == process2.process_code
+      assert process_data2.data == process2.data
     end
 
     test "get_process_data!/1 returns the process_data with given id" do
-      process_data = process_data_fixture()
-      assert Processes.get_process_data!(process_data.id) == process_data
+      process_data = insert(:process_data)
+
+      assert Processes.get_process_data!(process_data.id).id == process_data.id
     end
 
     test "get_process_data_by_process_code/1 returns the process_data with given process_code" do
-      process_data = process_data_fixture()
-      assert Processes.get_process_data_by_process_code(process_data.process_code) == process_data
+      process_data = insert(:process_data)
+
+      assert Processes.get_process_data_by_process_code(process_data.process_code).id ==
+               process_data.id
     end
 
     test "create_process_data/1 with valid data creates a process_data" do
-      assert {:ok, %ProcessData{} = process_data} = Processes.create_process_data(@valid_attrs)
-      assert process_data.data == %{}
-      assert process_data.process_code == "some process_code"
+      court = insert(:court)
+
+      valid_attrs = %{
+        data: %{"le_processito" => "su_valorzito"},
+        process_code: "some process_code",
+        court_id: court.id
+      }
+
+      assert {:ok, %ProcessData{} = process_data} = Processes.create_process_data(valid_attrs)
+      assert process_data.data == valid_attrs.data
+      assert process_data.process_code == valid_attrs.process_code
     end
 
     test "create_process_data/1 with invalid data returns error changeset" do
@@ -113,7 +122,7 @@ defmodule CrawlerJus.ProcessesTest do
     end
 
     test "update_process_data/2 with valid data updates the process_data" do
-      process_data = process_data_fixture()
+      process_data = insert(:process_data)
 
       assert {:ok, %ProcessData{} = process_data} =
                Processes.update_process_data(process_data, @update_attrs)
@@ -123,22 +132,24 @@ defmodule CrawlerJus.ProcessesTest do
     end
 
     test "update_process_data/2 with invalid data returns error changeset" do
-      process_data = process_data_fixture()
+      process_data = insert(:process_data)
 
       assert {:error, %Ecto.Changeset{}} =
                Processes.update_process_data(process_data, @invalid_attrs)
 
-      assert process_data == Processes.get_process_data!(process_data.id)
+      non_updated_process_data = Processes.get_process_data!(process_data.id)
+      assert process_data.data == non_updated_process_data.data
+      assert process_data.process_code == non_updated_process_data.process_code
     end
 
     test "delete_process_data/1 deletes the process_data" do
-      process_data = process_data_fixture()
+      process_data = insert(:process_data)
       assert {:ok, %ProcessData{}} = Processes.delete_process_data(process_data)
       assert_raise Ecto.NoResultsError, fn -> Processes.get_process_data!(process_data.id) end
     end
 
     test "change_process_data/1 returns a process_data changeset" do
-      process_data = process_data_fixture()
+      process_data = insert(:process_data)
       assert %Ecto.Changeset{} = Processes.change_process_data(process_data)
     end
   end

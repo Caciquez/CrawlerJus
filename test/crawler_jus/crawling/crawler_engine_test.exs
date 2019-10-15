@@ -26,12 +26,5 @@ defmodule CrawlerJus.CrawlerEngineTest do
                  List.keyfind(headers, "Content-Type", 0)
       end
     end
-
-    test "returns error when process code is invalid" do
-      use_cassette "crawl_process_error" do
-        {:error, msg} = CrawlerEngine.start_crawler("987.00-tootledoot")
-        assert msg == :invalid_process_number
-      end
-    end
   end
 end

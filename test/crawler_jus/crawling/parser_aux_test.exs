@@ -2,7 +2,7 @@ defmodule CrawlerJus.ParserAuxTest do
   use CrawlerJusWeb.ConnCase
   use ExUnit.Case, async: true
 
-  alias CrawlerJus.{CrawlerEngine, ParserAux}
+  alias CrawlerJus.ParserAux
 
   describe "check_movimentation_url/1" do
     test "return nil if doesnt recieve a url" do
