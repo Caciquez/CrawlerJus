@@ -1,51 +1,34 @@
 import React, { Component, Fragment } from 'react'
 import ProcessSearchContext from '../context/Context'
+import DisplayMovements from './DisplayMoviments'
+import DisplayData from './DisplayData'
+import DisplayProcessParts from './DisplayProcessParts'
 
 class DisplayProcess extends Component {
   static contextType = ProcessSearchContext
 
   render = () => {
     const { context } = this
-    console.log(context.state.process_data)
+
     if (context.state.process_data) {
       return (
         <Fragment>
+          <h5>Processo n. {context.state.process_data.process_code} do {context.state.process_data.court.name_abbreviation}</h5>
+          <h6>Distrubuido em {context.state.process_data.data.data_distribution}</h6>
           <div className="row">
-            <div className="col s12 m12">
-              <h5>Processo n. {context.state.process_data.process_code} do {context.state.process_data.court.name_abbreviation}</h5>
-              <div className="card">
-                <div className="card-content">
-                  <span className="card-title"><b>Movimentações</b></span>
-                  {context.state.process_data.data.moviments.map(moviment => (
-                    <Fragment>
-                      <span key={moviment.id}>{moviment.data}</span>
-                      <p>{moviment.moviment}</p>
-                    </Fragment>
-                  ))}
-                </div>
-              </div>
+            <div className="col s12 m8 l8">
+              <DisplayMovements moviments={context.state.process_data.data.moviments} />
             </div>
-          </div>
 
-          <div className="row">
-            <div className="col s12 m12">
-              <div className="card">
-                <div className="card-content">
-                  <span className="card-title"><b>Dados do processo</b></span>
-                  <p>I am a very simple card. I am good at containing small bits of information.
-          I am convenient because I require little markup to use effectively.</p>
-                </div>
-              </div>
+            <div className="col s12 m4 l4">
+              <DisplayData data={context.state.process_data.data} />
             </div>
-          </div>
 
-          <div className="row">
-            <div className="col s12 m12">
+            <div className="col s12 m4 l4">
               <div className="card">
                 <div className="card-content">
                   <span className="card-title"><b>Partes envolvidas</b></span>
-                  <p>I am a very simple card. I am good at containing small bits of information.
-          I am convenient because I require little markup to use effectively.</p>
+                  <DisplayProcessParts parts={context.state.process_data.data.process_parts} />
                 </div>
               </div>
             </div>
@@ -53,11 +36,15 @@ class DisplayProcess extends Component {
         </Fragment>
       )
     }
-    return (
-      <Fragment>
-        <h4>Pesquise um processo.</h4>
-      </Fragment>
-    )
+
+    if (context.state.errors) {
+      return (
+        <Fragment>
+          <h4>{context.state.errors}</h4>
+        </Fragment>
+      )
+    }
+    return null
   }
 }
 

@@ -22,3 +22,5 @@ RUN mix local.hex --force && mix local.rebar --force
 RUN mix archive.install hex phx_new 1.4.9 --force
 
 WORKDIR /app
+
+RUN cd app/assets && yarn install

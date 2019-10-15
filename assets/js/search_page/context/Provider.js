@@ -4,6 +4,7 @@ import SearchHeader from '../search_process/SearchHeader'
 import DisplayProcess from '../display_process/DisplayProcess'
 import ProcessSearchContext from './Context'
 import request from '../../api/request'
+import { throws } from 'assert'
 
 class ProcessSearchProvider extends React.Component {
   static propTypes = {
@@ -13,17 +14,22 @@ class ProcessSearchProvider extends React.Component {
     ...this.props,
     process_data: null,
     process_code: null,
-    court_id: null
+    court_id: null,
+    errors: null
   }
 
-  handleInvalid = event => {
-    event.target.setCustomValidity('Dado obrigatório')
+  invalidParameters = () => {
+    if (court_id && process_code) {
+      return false
+    }
+    return true
   }
 
   handleSubmit = async evt => {
     evt.preventDefault()
 
     try {
+
       const path = `/search-process?court_id=${this.state.court_id}&process_code=${this.state.process_code}`
       const result = await request.get(path)
 
@@ -38,6 +44,7 @@ class ProcessSearchProvider extends React.Component {
       }
     }
   }
+
 
   handleUrlParams = (key, event) => {
     if (key == 'court_id') {

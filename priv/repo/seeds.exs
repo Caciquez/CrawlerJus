@@ -17,7 +17,7 @@ alias CrawlerJus.Processes.Court
 import Ecto.Query, warn: false
 
 if Repo.aggregate(Court, :count, :id) == 0 do
-  {:ok, court} =
+  {:ok, _court} =
     Processes.create_court(%{
       name: "Tribunal de Justiça do Alagoas",
       name_abbreviation: "TJAL",

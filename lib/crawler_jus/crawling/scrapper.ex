@@ -15,7 +15,7 @@ defmodule CrawlerJus.Scrapper do
         action_value: fn -> apply(__MODULE__, Enum.at(functions, 0), [html_body]) end
       )
       |> TaskEngine.put(
-        data_distribition: fn -> apply(__MODULE__, Enum.at(functions, 1), [html_body]) end
+        data_distribution: fn -> apply(__MODULE__, Enum.at(functions, 1), [html_body]) end
       )
       |> TaskEngine.put(judge: fn -> apply(__MODULE__, Enum.at(functions, 2), [html_body]) end)
       |> TaskEngine.put(area: fn -> apply(__MODULE__, Enum.at(functions, 3), [html_body]) end)
@@ -118,20 +118,17 @@ defmodule CrawlerJus.Scrapper do
   end
 
   def scrap_process_parts(html_body) do
-    list_of_roles_values =
-      html_body
-      |> ParserAux.extract_all_roles_values()
-      |> Enum.map(fn x -> x <> to_string(:rand.uniform(99_999)) end)
+    list_of_roles_values = ParserAux.extract_all_roles_values(html_body)
 
     list_of_part_names = ParserAux.extract_all_parts_names(html_body)
 
     list_of_roles_values
     |> Enum.zip(list_of_part_names)
-    |> Enum.into(Map.new())
+    |> Enum.map(fn {k, v} -> %{"#{k}" => v} end)
   end
 
   def scrap_process_movimentations(html_body) do
-    moviment_list = Floki.find(html_body, "#tabelaUltimasMovimentacoes > tr")
+    moviment_list = Floki.find(html_body, "#tabelaTodasMovimentacoes > tr")
 
     Enum.map(moviment_list, fn element ->
       %{

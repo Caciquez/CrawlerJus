@@ -20,6 +20,7 @@
     "phoenix_html": "file:../deps/phoenix_html",
     "react": "^16.10.2",
     "react-dom": "^16.10.2",
+    "react-paginate": "^6.3.0",
     "react-phoenix": "file:../deps/react_phoenix"
   },
   "devDependencies": {
@@ -31,13 +32,13 @@
     "babel-polyfill": "^6.0.16",
     "copy-webpack-plugin": "^4.5.0",
     "css-loader": "^2.1.1",
-    "sass-loader": "^8.0.0",
     "eslint": "^6.5.1",
     "eslint-plugin-react": "^7.16.0",
     "file-loader": "^4.2.0",
     "materialize-loader": "^3.0.1",
     "mini-css-extract-plugin": "^0.4.0",
     "optimize-css-assets-webpack-plugin": "^4.0.0",
+    "sass-loader": "^8.0.0",
     "uglifyjs-webpack-plugin": "^1.2.4",
     "url-loader": "^2.2.0",
     "webpack": "^4.40.2",

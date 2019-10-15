@@ -23,4 +23,7 @@ mix ecto.create
 echo "Migration database..."
 mix ecto.migrate
 
+echo "Running seeds..."
+mix run priv/repo/seeds.exs
+
 exec $cmd
