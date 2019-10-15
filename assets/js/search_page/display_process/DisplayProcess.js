@@ -12,7 +12,7 @@ class DisplayProcess extends Component {
         <Fragment>
           <div className="row">
             <div className="col s12 m12">
-              <h5>Processo n. {context.state.process_code} do {context.state.searched_court.name_abbreviation}</h5>
+              <h5>Processo n. {context.state.process_data.process_code} do {context.state.process_data.court.name_abbreviation}</h5>
               <div className="card">
                 <div className="card-content">
                   <span className="card-title"><b>Movimentações</b></span>

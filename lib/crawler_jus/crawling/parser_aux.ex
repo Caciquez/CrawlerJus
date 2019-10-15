@@ -25,6 +25,7 @@ defmodule CrawlerJus.ParserAux do
     html_word
     |> Floki.text()
     |> String.replace(~r/(\w*:\w+|\w+:\w*)/, "")
+    |> String.replace("Defensor", "")
     |> String.replace(~r/ {2,}/, "")
     |> String.replace("\t", "")
     |> String.split("\n")

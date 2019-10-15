@@ -13,8 +13,7 @@ class ProcessSearchProvider extends React.Component {
     ...this.props,
     process_data: null,
     process_code: null,
-    court_id: null,
-    searched_court: null
+    court_id: null
   }
 
   handleInvalid = event => {
@@ -28,7 +27,7 @@ class ProcessSearchProvider extends React.Component {
       const path = `/search-process?court_id=${this.state.court_id}&process_code=${this.state.process_code}`
       const result = await request.get(path)
 
-      this.setState({ process_data: result.data.process_data, searched_court: result.data.court })
+      this.setState({ process_data: result.data.process_data })
     } catch (errors) {
       window.scrollTo(0, 0)
 

@@ -51,10 +51,7 @@ defmodule CrawlerJus.RedisCache do
       {:ok, data} ->
         decoded_data = Jason.decode!(data, %{keys: :atoms})
 
-        court_data = decoded_data.court
-        process_data = Map.delete(decoded_data, :court)
-
-        {:ok, process_data, court_data}
+        {:ok, decoded_data}
 
       {:error, error} ->
         {:error, error}

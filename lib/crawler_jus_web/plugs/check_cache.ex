@@ -12,10 +12,9 @@ defmodule CrawlerJusWeb.Plugs.CheckCache do
 
     with true <- Processes.valid_process_number?(process_code),
          false <- RedisCache.process_cache_expired?(process_code),
-         {:ok, process_data, court_data} = RedisCache.get_process_cache_data(process_code) do
+         {:ok, process_data} = RedisCache.get_process_cache_data(process_code) do
       conn
       |> assign(:process_cached_data, process_data)
-      |> assign(:court_cached_data, court_data)
     else
       {:error, msg} ->
         conn

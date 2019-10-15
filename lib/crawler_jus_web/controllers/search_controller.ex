@@ -16,8 +16,6 @@ defmodule CrawlerJusWeb.SearchController do
         "court_id" => court_id,
         "process_code" => process_code
       }) do
-    court = Processes.get_court!(court_id)
-
     with {:ok, html_body, _headers} <- CrawlerEngine.start_crawler(process_code),
          {:ok, scrapped_data} <- Scrapper.start_scrapper(html_body),
          {:ok, data} <-
@@ -26,16 +24,13 @@ defmodule CrawlerJusWeb.SearchController do
            RedisCache.set_process_cache_ttl(process_code, data) do
       conn
       |> put_status(200)
-      |> json(%{data: %{process_data: scrapped_data, court: court}})
+      |> json(%{data: %{process_data: data}})
     end
   end
 
-  def show(
-        %{assigns: %{process_cached_data: process_data, court_cached_data: court_data}} = conn,
-        _params
-      ) do
+  def show(%{assigns: %{process_cached_data: process_data}} = conn, _params) do
     conn
     |> put_status(200)
-    |> json(%{data: %{process_data: process_data, court: court_data}})
+    |> json(%{data: %{process_data: process_data}})
   end
 end
