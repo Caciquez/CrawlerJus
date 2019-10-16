@@ -1,13 +1,11 @@
 defmodule CrawlerJusWeb.ErrorFallbackController do
   use Phoenix.Controller
 
-  alias CrawlerJusWeb.ErrorView
-
   def call(conn, {:error, %Ecto.Changeset{} = changeset}) do
     conn
     |> put_status(:unprocessable_entity)
-    |> put_view(ErrorView)
-    |> render("error.json", changeset)
+    |> json(%{message: changeset})
+    |> halt()
   end
 
   def call(conn, {:error, message}) when is_binary(message) do
@@ -19,25 +17,30 @@ defmodule CrawlerJusWeb.ErrorFallbackController do
   def call(conn, {:error, :refused}) do
     conn
     |> put_status(:not_acceptable)
-    |> put_view(ErrorView)
-    |> render("error.json", %{message: "Ocorreu um erro"})
+    |> json(%{message: "Ocorreu um erro durante a busca de seu processo! Tente novamente"})
+    |> halt()
   end
 
   def call(conn, {:error, :timeout}) do
     conn
     |> put_status(:request_timeout)
-    |> put_view(ErrorView)
-    |> render("error.json", %{
-      message: "Tempo de requisição esgotado"
-    })
+    |> json(%{message: "Tempo de requisição esgotado"})
+    |> halt()
   end
 
-  def call(conn, {:error, :process_not_found}) do
+  def call(conn, {:error, :no_location_header}) do
     conn
     |> send_resp(404, "Codigo de processo não existente")
   end
 
   def call(conn, {:error, _error}) do
     put_status(conn, :not_acceptable)
+  end
+
+  def call(conn, _error) do
+    conn
+    |> put_status(:unauthorized)
+    |> json(%{message: "Ocorreu um erro durante a busca de seu processo! Tente novamente"})
+    |> halt()
   end
 end

@@ -1,0 +1,6 @@
+{
+  "setupFilesAfterEnv": [
+    "./jest.init.js"
+  ],
+  "testRegex": "((\\.|/*.)(spec))\\.js?$"
+}

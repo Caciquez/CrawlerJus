@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 
 const DisplayData = (props) => {
   const { data } = props;
@@ -40,6 +41,19 @@ const DisplayData = (props) => {
       </div>
     </div>
   );
+};
+
+DisplayData.propTypes = {
+  data: PropTypes.objectOf(
+    PropTypes.shape({
+      area: PropTypes.string.isRequired,
+      class: PropTypes.string.isRequired,
+      data_distribition: PropTypes.string.isRequired,
+      judge: PropTypes.string.isRequired,
+      subject_matter: PropTypes.string.isRequired,
+      action_value: PropTypes.string.isRequired,
+    }),
+  ),
 };
 
 export default DisplayData;

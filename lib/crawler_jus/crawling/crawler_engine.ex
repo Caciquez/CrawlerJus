@@ -48,26 +48,10 @@ defmodule CrawlerJus.CrawlerEngine do
 
   defp get_location_header(headers) do
     for {key, value} <- headers, String.downcase(key) == "location" do
-      if String.contains?(value, ["show.do"]) do
-        value
-      else
-        []
+      case String.contains?(value, ["show.do"]) do
+        true -> value
+        false -> []
       end
     end
-  end
-
-  # @Todo maybe beutify the string building by using list keys and looping then
-  def query_parameters(process_number) do
-    [
-      conversationId: "",
-      "dadosConsulta.localPesquisa.cdLocal": 1,
-      cbPesquisa: "NUMPROC",
-      "dadosConsulta.tipoNuProcesso": "UNIFICADO",
-      numeroDigitoAnoUnificado: String.slice(process_number, 0..-11),
-      foroNumeroUnificado: String.slice(process_number, -4..-1),
-      "dadosConsulta.valorConsultaNuUnificado": process_number,
-      "dadosConsulta.valorConsulta": "",
-      uuidCaptcha: "sajcaptcha_4613b036352e45e580fb5e5769717e49"
-    ]
   end
 end

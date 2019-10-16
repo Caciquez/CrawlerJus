@@ -1,20 +1,16 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 import SearchHeader from '../search_process/SearchHeader'
 import DisplayProcess from '../display_process/DisplayProcess'
 import ProcessSearchContext from './Context'
 import request from '../../api/request'
-import { throws } from 'assert'
 
 class ProcessSearchProvider extends React.Component {
-  static propTypes = {
-    courts: PropTypes.array
-  }
+
   state = {
     ...this.props,
     process_data: null,
-    process_code: null,
-    court_id: null,
+    process_code: "",
+    court_id: "",
     errors: null,
     current_moviments_on_page: null
   }
@@ -26,13 +22,6 @@ class ProcessSearchProvider extends React.Component {
 
   pageSlicer = (moviments, page) => {
     return moviments.slice(page * 10, (page + 1) * 10)
-  }
-
-  invalidParameters = () => {
-    if (court_id && process_code) {
-      return false
-    }
-    return true
   }
 
   handleSubmit = async evt => {
@@ -51,12 +40,7 @@ class ProcessSearchProvider extends React.Component {
 
     } catch (errors) {
       window.scrollTo(0, 0)
-      console.log(errors)
-      // if (errors instanceof Error) {
-      //   this.setState({ errors: errors })
-      // } else {
       this.setState({ errors })
-      // }
     }
   }
 

@@ -29,14 +29,17 @@ defmodule CrawlerJus.Processes do
 
   ## Examples
 
-      iex> get_court!(123)
-      %Court{}
+  iex> get_court!(123)
+  %Court{}
 
-      iex> get_court!(456)
-      ** (Ecto.NoResultsError)
+  iex> get_court!(456)
+  ** (Ecto.NoResultsError)
 
   """
-  def get_court!(id), do: Repo.get!(Court, id)
+
+  def get_court(""), do: nil
+
+  def get_court(id), do: Repo.get(Court, id)
 
   @doc """
   Creates a court.
@@ -221,13 +224,15 @@ defmodule CrawlerJus.Processes do
   end
 
   def preload_court_data_into_process(process), do: Repo.preload(process, [:court])
+  def valid_process_number(""), do: {:error, :process_invalid}
 
-  def valid_process_number?(process_number) do
+  def valid_process_number(process_number) do
     with 25 <- String.length(process_number),
-         "8.02" <- String.slice(process_number, 16..-6) do
-      true
+         "8.02" <- String.slice(process_number, 16..-6),
+         false <- String.match?(process_number, ~r/ˆ[a-zA-Z]/) do
+      {:ok, :process_valid}
     else
-      _ -> false
+      _ -> {:error, :process_invalid}
     end
   end
 end

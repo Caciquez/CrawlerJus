@@ -1,13 +1,14 @@
 import React, { Fragment } from 'react';
+import PropTypes from 'prop-types';
 
 const DisplayProcessParts = (props) => {
   const { parts } = props;
 
-  const part = parts.map((part_obj, index) => {
-    const [[key, value]] = Object.entries(part_obj);
+  const part = parts.map((partobj, index) => {
+    const [[key, value]] = Object.entries(partobj);
 
     return (
-      <Fragment key={index}>
+      <Fragment key={key}>
         <div className="parts-card">
           <span className="parts-role">
             <b>
@@ -21,6 +22,17 @@ const DisplayProcessParts = (props) => {
     );
   });
   return part;
+};
+
+DisplayProcessParts.PropTypes = {
+  parts: PropTypes.arrayOf(
+    PropTypes.shape(
+      {
+        key: PropTypes.string.isRequired,
+        value: PropTypes.string.isRequired,
+      },
+    ),
+  ),
 };
 
 export default DisplayProcessParts;

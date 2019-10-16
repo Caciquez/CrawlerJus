@@ -14,26 +14,6 @@ defmodule CrawlerJusWeb.SearchControllerTest do
       court = insert(:court)
       process_data = insert(:process_data)
 
-      process_scrapped = %{
-        "action_value" => "R$ 1000,00",
-        "area" => "Penal",
-        "class" => "Ação Penal Pública",
-        "data_distribition" => "30/09/2019 às 15:57 - Sorteio",
-        "judge" => "John The Monster",
-        "movimentations_list" => [
-          %{
-            "data" => "15/09/2017",
-            "moviment" => "Baixa Definitiva",
-            "moviment_url" => "/url/com/dados/do/processo"
-          }
-        ],
-        "parts" => %{
-          " Defensor" => "Defensor",
-          " Procurador" => "Município de Alagoas"
-        },
-        "subject_matter" => "Prisão Domiciliar"
-      }
-
       CrawlerJus.RedisCacheMock
       |> expect(:process_cache_expired?, fn _process_code -> false end)
 
@@ -46,7 +26,8 @@ defmodule CrawlerJusWeb.SearchControllerTest do
           )
         )
 
-      json_response(conn, 200) == process_scrapped
+      assert json_response(conn, 200)["data"]["process_data"]["process_code"] ==
+               process_data.process_code
     end
   end
 end

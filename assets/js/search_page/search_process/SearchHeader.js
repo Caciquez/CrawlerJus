@@ -1,4 +1,4 @@
-import React, { Component, Fragment } from 'react'
+import React, { Component } from 'react'
 import SearchSelectOptions from './SearchSelectOptions'
 import SearchTextInput from './SearchTextInput'
 import SearchButton from './SearchButton'

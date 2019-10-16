@@ -1,5 +1,4 @@
 import React, { Fragment } from 'react'
-import PropTypes from 'prop-types'
 import ProcessSearchContext from '../context/Context'
 
 class SearchButton extends React.Component {

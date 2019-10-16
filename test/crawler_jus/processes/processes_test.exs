@@ -31,9 +31,9 @@ defmodule CrawlerJus.ProcessesTest do
       assert Processes.list_courts() == [court]
     end
 
-    test "get_court!/1 returns the court with given id" do
+    test "get_court/1 returns the court with given id" do
       court = court_fixture()
-      assert Processes.get_court!(court.id) == court
+      assert Processes.get_court(court.id) == court
     end
 
     test "create_court/1 with valid data creates a court" do
@@ -58,13 +58,13 @@ defmodule CrawlerJus.ProcessesTest do
     test "update_court/2 with invalid data returns error changeset" do
       court = court_fixture()
       assert {:error, %Ecto.Changeset{}} = Processes.update_court(court, @invalid_attrs)
-      assert court == Processes.get_court!(court.id)
+      assert court == Processes.get_court(court.id)
     end
 
     test "delete_court/1 deletes the court" do
       court = court_fixture()
       assert {:ok, %Court{}} = Processes.delete_court(court)
-      assert_raise Ecto.NoResultsError, fn -> Processes.get_court!(court.id) end
+      assert nil == Processes.get_court(court.id)
     end
 
     test "change_court/1 returns a court changeset" do
