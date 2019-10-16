@@ -23,4 +23,5 @@ RUN mix archive.install hex phx_new 1.4.9 --force
 
 WORKDIR /app
 
-RUN cd app/assets && yarn install
+COPY /config/db/dev.secret.exs.example ./config/db/dev.secret.exs
+COPY /config/db/test.secret.exs.example ./config/db/test.secret.exs

@@ -10,14 +10,7 @@
 - `Docker version 19.03.2`
 - `Docker-compose version 1.24.1`
 
-1. Copy example secret config files `dev` and `test` from `crawler_jus/config/db`
-
-  ```bash
-  cd crawler_jus
-  cp config/db/dev.secret.exs.example config/db/dev.secret.exs
-  cp config/db/test.secret.exs.example config/db/test.secret.exs
-  ```
-2. Run the following command to build the application on docker-compose:
+1. Run the following command to build the application on docker-compose:
 
 ```bash
 docker-compose up --build

@@ -26,4 +26,7 @@ mix ecto.migrate
 echo "Running seeds..."
 mix run priv/repo/seeds.exs
 
+echo "Runnning yarn install..."
+cd assets && yarn install && cd ..
+
 exec $cmd
