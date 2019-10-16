@@ -1,0 +1,44 @@
+<table id="tableTodasPartes" style="margin-left:15px; margin-top:1px; display: none; " align="center" width="98%"
+  border="0" cellspacing="0" cellpadding="0">
+  <tbody>
+    <tr class="fundoClaro">
+      <td valign="top" align="right" width="141" style="padding-bottom: 5px">
+        <span class="mensagemExibindo">Demandante:&nbsp;</span>
+      </td>
+      <td width="*" align="left" style="padding-bottom: 5px">
+        José Carlos Alves de Farias Filho
+        <br>
+        <span class="mensagemExibindo">Advogado:&nbsp;</span>
+        Hanna Gabriela Cardoso Nunes Ferreira&nbsp;
+        <br>
+        <span class="mensagemExibindo">Advogado:&nbsp;</span>
+        Giane Aguiar Cardoso&nbsp;
+      </td>
+    </tr>
+    <tr class="fundoClaro">
+      <td valign="top" align="right" width="141" style="padding-bottom: 5px">
+        <span class="mensagemExibindo">Demandado:&nbsp;</span>
+      </td>
+      <td width="*" align="left" style="padding-bottom: 5px">
+        Losango Promoções de vendas Ltda
+        <br>
+        <span class="mensagemExibindo">Advogado:&nbsp;</span>
+        SIMONE ALVES DA SLVA&nbsp;
+      </td>
+    </tr>
+    <tr class="fundoClaro">
+      <td valign="top" align="right" width="141" style="padding-bottom: 5px">
+        <span class="mensagemExibindo">Demandado:&nbsp;</span>
+      </td>
+      <td width="*" align="left" style="padding-bottom: 5px">
+        HSBC SEGUROS (BRASIL) S/A
+        <br>
+        <span class="mensagemExibindo">Advogado:&nbsp;</span>
+        DIOGO DANTAS DE MOARES FURTADO&nbsp;
+        <br>
+        <span class="mensagemExibindo">Advogado:&nbsp;</span>
+        Renata Trigueiro Freitas&nbsp;
+      </td>
+    </tr>
+  </tbody>
+</table>

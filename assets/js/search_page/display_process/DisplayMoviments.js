@@ -13,8 +13,8 @@ const DisplayMoviments = (props) => {
           <span className="card-title"><b>Movimentações</b></span>
           {moviments.map((moviment, index) => (
             <div className="moviment-detail-wrapper" key={index}>
-              <span className="moviment-data"><b>{moviment.data}</b></span>
-              <p className="moviment-log">{moviment.moviment}</p>
+              <span className="moviment-data"><b>{moviment.date}</b></span>
+              <p className="moviment-log">{moviment.content}</p>
               {moviment.moviment_url == null ? null : <a href={`https://www2.tjal.jus.br${moviment.moviment_url}`} target="_blank">PDF</a>}
             </div>
           ))}

@@ -13,13 +13,13 @@ defmodule CrawlerJus.ProcessDataFactory do
             "judge" => "Antonio Emanuel Dória Ferreira",
             "movimentations_list" => [
               %{
-                "data" => "15/09/2017",
-                "moviment" => "Baixa Definitiva",
+                "date" => "15/09/2017",
+                "content" => "Baixa Definitiva",
                 "moviment_url" => "/url/com/dados/do/processo"
               },
               %{
-                "data" => "05/07/2016",
-                "moviment" => "Baixa definitiva",
+                "date" => "05/07/2016",
+                "content" => "Baixa definitiva",
                 "moviment_url" => "/url/com/dados/do/processo"
               }
             ],

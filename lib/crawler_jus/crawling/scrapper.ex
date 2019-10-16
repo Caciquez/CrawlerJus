@@ -3,7 +3,6 @@ defmodule CrawlerJus.Scrapper do
 
   alias CrawlerJus.{ParserAux, TaskEngine}
 
-  @spec start_scrapper(any) :: {:ok, map}
   def start_scrapper(html_body) do
     functions =
       __MODULE__.__info__(:functions) |> Keyword.delete(:start_scrapper) |> Keyword.keys()
@@ -118,9 +117,9 @@ defmodule CrawlerJus.Scrapper do
   end
 
   def scrap_process_parts(html_body) do
-    list_of_roles_values = ParserAux.extract_all_roles_values(html_body)
+    list_of_roles_values = ParserAux.extract_roles_names(html_body)
 
-    list_of_part_names = ParserAux.extract_all_parts_names(html_body)
+    list_of_part_names = ParserAux.extract_parts_names(html_body)
 
     list_of_roles_values
     |> Enum.zip(list_of_part_names)
@@ -132,22 +131,9 @@ defmodule CrawlerJus.Scrapper do
 
     Enum.map(moviment_list, fn element ->
       %{
-        "data" =>
-          element
-          |> Floki.find("tr > td:first-child")
-          |> Floki.text()
-          |> ParserAux.word_cleaner_aux(),
-        "moviment" =>
-          element
-          |> Floki.find("tr > td:nth-child(3)")
-          |> Floki.text()
-          |> ParserAux.word_cleaner_aux(),
-        "moviment_url" =>
-          element
-          |> Floki.find("tr > td > .linkMovVincProc")
-          |> Floki.attribute("href")
-          |> Enum.uniq()
-          |> ParserAux.check_movimentation_url()
+        "date" => ParserAux.extract_moviment_date(element),
+        "content" => ParserAux.extract_moviment_content(element),
+        "moviment_url" => ParserAux.extract_moviment_url(element)
       }
     end)
   end
