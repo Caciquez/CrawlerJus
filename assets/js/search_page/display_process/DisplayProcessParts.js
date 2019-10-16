@@ -12,7 +12,7 @@ const DisplayProcessParts = (props) => {
           <span className="parts-role">
             <b>
               {key}
-:
+              :
             </b>
           </span>
           <p className="parts-value">{value}</p>

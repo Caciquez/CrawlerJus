@@ -15,7 +15,17 @@ class ProcessSearchProvider extends React.Component {
     process_data: null,
     process_code: null,
     court_id: null,
-    errors: null
+    errors: null,
+    current_moviments_on_page: null
+  }
+
+  buildMovimentsPage = (page) => {
+    const { moviments } = this.state.process_data.data
+    return this.pageSlicer(moviments, page)
+  }
+
+  pageSlicer = (moviments, page) => {
+    return moviments.slice(page * 10, (page + 1) * 10)
   }
 
   invalidParameters = () => {
@@ -29,22 +39,34 @@ class ProcessSearchProvider extends React.Component {
     evt.preventDefault()
 
     try {
-
       const path = `/search-process?court_id=${this.state.court_id}&process_code=${this.state.process_code}`
       const result = await request.get(path)
 
-      this.setState({ process_data: result.data.process_data })
+      const initial_page = this.pageSlicer(result.data.process_data.data.moviments, 0)
+
+      this.setState({
+        current_moviments_on_page: initial_page
+        , process_data: result.data.process_data
+      })
+
     } catch (errors) {
       window.scrollTo(0, 0)
-
-      if (errors instanceof Error) {
-        this.setState({ errors: errors.message })
-      } else {
-        this.setState({ errors })
-      }
+      console.log(errors)
+      // if (errors instanceof Error) {
+      //   this.setState({ errors: errors })
+      // } else {
+      this.setState({ errors })
+      // }
     }
   }
 
+  handlePageDisplay = (data) => {
+    const { selected: page } = data
+    const new_page = this.buildMovimentsPage(page)
+    this.setState({
+      current_moviments_on_page: new_page
+    })
+  }
 
   handleUrlParams = (key, event) => {
     if (key == 'court_id') {
@@ -62,7 +84,8 @@ class ProcessSearchProvider extends React.Component {
         value={{
           state: this.state,
           handleSubmit: this.handleSubmit,
-          handleUrlParams: this.handleUrlParams
+          handleUrlParams: this.handleUrlParams,
+          handlePageDisplay: this.handlePageDisplay
         }}
       >
         <SearchHeader />

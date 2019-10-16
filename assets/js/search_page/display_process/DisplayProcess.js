@@ -9,7 +9,6 @@ class DisplayProcess extends Component {
 
   render = () => {
     const { context } = this
-
     if (context.state.process_data) {
       return (
         <Fragment>
@@ -17,7 +16,11 @@ class DisplayProcess extends Component {
           <h6>Distrubuido em {context.state.process_data.data.data_distribution}</h6>
           <div className="row">
             <div className="col s12 m8 l8">
-              <DisplayMovements moviments={context.state.process_data.data.moviments} />
+              <DisplayMovements
+                moviments={context.state.current_moviments_on_page}
+                pageCount={context.state.process_data.data.moviments.length / 10}
+                handlePageDisplay={context.handlePageDisplay}
+              />
             </div>
 
             <div className="col s12 m4 l4">
@@ -40,7 +43,7 @@ class DisplayProcess extends Component {
     if (context.state.errors) {
       return (
         <Fragment>
-          <h4>{context.state.errors}</h4>
+          <h4>{context.state.errors.message}</h4>
         </Fragment>
       )
     }
