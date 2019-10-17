@@ -8,7 +8,7 @@ const DisplayProcessParts = (props) => {
     const [[key, value]] = Object.entries(partobj);
 
     return (
-      <Fragment key={key}>
+      <Fragment key={value}>
         <div className="parts-card">
           <span className="parts-role">
             <b>

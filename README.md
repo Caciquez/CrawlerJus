@@ -1,6 +1,6 @@
 # CrawlerJus
 
-> Developed using: Elixir, Phoenix Framework, Erlang, Postgres, Redis
+> Created using: Elixir, Phoenix Framework, Erlang, Postgres, Redis, Docker
 
 > Clone the project
   `https://github.com/Caciquez/CrawlerJus.git`
@@ -16,11 +16,16 @@
 docker-compose up --build
 ```
 
-3. Run the following command to execute the tests on docker enviroment
+2. Run the following command to execute the tests on docker enviroment
 
+> Backend
 ```bash
 docker-compose run web mix test
-```
+``` 
+> Frontend
+```bash
+docker-compose run web bash -c "cd assets/ && yarn test"
+``` 
 
 # Requirements Native development
 
